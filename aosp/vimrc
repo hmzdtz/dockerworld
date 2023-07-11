@@ -1,0 +1,51 @@
+syntax on
+set nocompatible
+
+au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+
+set encoding=utf-8
+" cp936 is gbk, euc-cn is gb2312
+set fileencodings=utf-8,cp936,gbk,euc-cn,gb2312,utf-16le,utf-16,ucs-bom,gb18030,iso-8859-2,iso-885915
+
+set mouse=a
+set autochdir
+
+set number
+set relativenumber
+set cursorline
+set laststatus=2
+set scrolloff=4
+
+set wildmenu
+set wildmode=list:longest,full
+set backspace=indent,eol,start
+
+set clipboard^=unnamed,unnamedplus
+
+set ignorecase
+set smartcase
+set hlsearch
+set incsearch
+nmap <space><cr> :nohl<cr>
+
+set tabstop=4
+set softtabstop=4
+set shiftwidth=4
+set expandtab
+set smarttab
+autocmd Filetype markdown,html,xml,yaml,toml,svg
+            \ setlocal tabstop=2 softtabstop=2 shiftwidth=2
+autocmd Filetype go setlocal noexpandtab
+set cindent
+set autoindent
+set smartindent
+set shiftround
+
+vnoremap <c-c> "+y
+inoremap <c-v> <esc>"+pi
+
+noremap <up> :resize +1<cr>
+noremap <down> :resize -1<cr>
+noremap <left> :vertical resize -1<cr>
+noremap <right> :vertical resize +1<cr>
+
