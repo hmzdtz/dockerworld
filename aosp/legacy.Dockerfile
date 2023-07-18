@@ -1,4 +1,4 @@
-FROM ubuntu:18.04
+FROM ubuntu:16.04
 
 ARG USERNAME="aosp"
 ARG GROUPNAME="aosp"
@@ -40,9 +40,9 @@ COPY ./vimrc /etc/vim
 
 # install basic build tools
 RUN apt-get install -y \
-    build-essential default-jdk python3 python3-pip ccache flex bison
-RUN ln -s /usr/bin/python3 /usr/bin/python
-RUN ln -s /usr/bin/pip3 /usr/bin/pip
+    build-essential default-jdk \
+    python python-pip python3 python3-pip \
+    ccache flex bison
 
 # install package required by AOSP, based on Google's documentation
 RUN apt-get install -y \
@@ -78,3 +78,4 @@ VOLUME ["$SRC_PATH"]
 WORKDIR "$SRC_PATH"
 
 USER "$USERNAME"
+
