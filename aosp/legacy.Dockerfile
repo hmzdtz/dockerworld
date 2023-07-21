@@ -44,10 +44,10 @@ RUN apt-get install -y \
     python python-pip python3 python3-pip \
     ccache flex bison
 
-# install package required by AOSP, based on Google's documentation
+# install package required by AOSP
 RUN apt-get install -y \
     zlib1g-dev libc6-dev-i386 libncurses5 lib32ncurses5-dev x11proto-core-dev \
-    libx11-dev lib32z1-dev libgl1-mesa-dev libxml2-utils xsltproc
+    libx11-dev lib32z1-dev libgl1-mesa-dev libxml2-utils xsltproc libssl-dev
 
 # install repo
 RUN mkdir -p /usr/local/bin
