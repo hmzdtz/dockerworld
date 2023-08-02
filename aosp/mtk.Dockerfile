@@ -1,10 +1,11 @@
-FROM ubuntu:22.04
+FROM ubuntu:18.04
 
 ARG USERNAME="aosp"
 ARG GROUPNAME="aosp"
 ARG PASSWORD="aosp"
 ARG TIMEZONE="Asia/Shanghai"
 
+ARG GIT_LFS_DEB="./git-lfs_2.13.3_amd64.deb"
 ARG SRC_PATH="/aosp"
 
 # config apt mirror
@@ -32,14 +33,14 @@ RUN apt-get install -y \
     apt-transport-https ca-certificates \
     sudo vim psmisc bash-completion \
     rsync bc cpio fontconfig \
-    zip unzip git git-lfs gnupg curl
+    zip unzip git gnupg curl
 
-RUN mkdir -p /etc/vim/
-COPY ./vimrc /etc/vim/
+RUN mkdir -p /etc/vim
+COPY ./vimrc /etc/vim
 
 # install basic build tools
 RUN apt-get install -y \
-    build-essential default-jdk python3 python-is-python3 ccache flex bison
+    build-essential default-jdk python python3 ccache flex bison
 
 # install package required by AOSP, based on Google's documentation
 RUN apt-get install -y \
@@ -50,6 +51,13 @@ RUN apt-get install -y \
 RUN mkdir -p /usr/local/bin
 RUN curl https://mirrors.tuna.tsinghua.edu.cn/git/git-repo -o /usr/local/bin/repo
 RUN chmod +x /usr/local/bin/repo
+
+# install git-lfs
+COPY $GIT_LFS_DEB /git-lfs.deb
+RUN apt-get install -y /git-lfs.deb && rm -f /git-lfs.deb
+
+# for mtk810
+RUN sudo apt-get install -y libxml-opml-simplegen-perl libswitch-perl libfile-copy-recursive-perl
 
 # clean apt cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
@@ -71,3 +79,4 @@ VOLUME ["$SRC_PATH"]
 WORKDIR "$SRC_PATH"
 
 USER "$USERNAME"
+
