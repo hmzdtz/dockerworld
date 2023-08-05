@@ -1,4 +1,4 @@
-FROM ubuntu:16.04
+FROM ubuntu:18.04
 
 ARG USERNAME="aosp"
 ARG GROUPNAME="aosp"
@@ -35,16 +35,24 @@ RUN apt-get install -y \
     rsync bc cpio fontconfig \
     zip unzip git gnupg curl
 
+# install git-lfs
+COPY $GIT_LFS_DEB /git-lfs.deb
+RUN apt-get install -y /git-lfs.deb && rm -f /git-lfs.deb
+
 RUN mkdir -p /etc/vim
 COPY ./vimrc /etc/vim
 
 # install basic build tools
-RUN apt-get install -y build-essential default-jdk python python-pip ccache flex bison
+RUN apt-get install -y \
+    build-essential default-jdk python python-pip ccache flex bison
 
-# install package required by AOSP
+# install package required by AOSP, based on Google's documentation
 RUN apt-get install -y \
     zlib1g-dev libc6-dev-i386 libncurses5 lib32ncurses5-dev x11proto-core-dev \
     libx11-dev lib32z1-dev libgl1-mesa-dev libxml2-utils xsltproc libssl-dev
+
+# for mtk810
+RUN sudo apt-get install -y libxml-opml-simplegen-perl libswitch-perl libfile-copy-recursive-perl
 
 # for t616
 RUN sudo pip install pycrypto==2.6.1 -i https://pypi.tuna.tsinghua.edu.cn/simple
@@ -53,10 +61,6 @@ RUN sudo pip install pycrypto==2.6.1 -i https://pypi.tuna.tsinghua.edu.cn/simple
 RUN mkdir -p /usr/local/bin
 RUN curl https://mirrors.tuna.tsinghua.edu.cn/git/git-repo -o /usr/local/bin/repo
 RUN chmod +x /usr/local/bin/repo
-
-# install git-lfs
-COPY $GIT_LFS_DEB /git-lfs.deb
-RUN apt-get install -y /git-lfs.deb && rm -f /git-lfs.deb
 
 # clean apt cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
