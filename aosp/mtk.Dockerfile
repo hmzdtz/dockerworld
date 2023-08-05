@@ -40,7 +40,7 @@ COPY ./vimrc /etc/vim
 
 # install basic build tools
 RUN apt-get install -y \
-    build-essential default-jdk python python3 ccache flex bison
+    build-essential default-jdk python ccache flex bison
 
 # install package required by AOSP, based on Google's documentation
 RUN apt-get install -y \
